@@ -30,7 +30,7 @@ public class CrossEnvironmentTests {
         config = new Configuration();
         config.setAppName("Zach's Demo Java App");
         config.setTestName("Cross Environment Test");
-        config.setViewportSize(new RectangleSize(800, 600));
+        config.setViewportSize(new RectangleSize(1024, 768));
 
         // Setting the baseline environment name
         // is what enables cross environment tests.

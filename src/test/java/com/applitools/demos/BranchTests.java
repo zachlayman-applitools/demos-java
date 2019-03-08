@@ -21,7 +21,7 @@ public class BranchTests extends BaseTest {
         config.setTestName("Branch Tests");
         config.setBranchName("default");
 
-        performSearch("virginia tech");
+        snapSearchResults("virginia tech");
     }
 
     @Test
@@ -30,6 +30,6 @@ public class BranchTests extends BaseTest {
         config.setTestName("Branch Tests");
         config.setBranchName("feature");
 
-        performSearch("texas lutheran university");
+        snapSearchResults("texas lutheran university");
     }
 }

@@ -1,7 +1,5 @@
 package com.applitools.demos;
 
-import java.util.function.Consumer;
-
 import com.applitools.eyes.BatchInfo;
 import com.applitools.eyes.MatchLevel;
 import com.applitools.eyes.RectangleSize;
@@ -14,6 +12,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 
 public class BaseTest {
@@ -21,11 +20,12 @@ public class BaseTest {
     protected WebDriver driver;
     protected Configuration config;
     protected BatchInfo batchInfo;
+    protected String batchName;
     protected int timeout = 5;
 
     @BeforeClass
     public void setupEyes() {
-        batchInfo = new BatchInfo(null);
+        batchInfo = new BatchInfo(batchName);
 
         eyes = new Eyes();
         eyes.setApiKey(System.getenv("APPLITOOLS_API_KEY"));
@@ -37,43 +37,28 @@ public class BaseTest {
         config.setViewportSize(new RectangleSize(1024, 768));
     }
 
-    public void navigateToWebpage(String url) {
-        eyesTest(url, new Consumer<String>() {
-            public void accept(String url) {
-                snapWebpage(url);
-            }
-        });
-    }
-
-    public void performSearch(String searchTerm) {
-        eyesTest(searchTerm, new Consumer<String>() {
-            public void accept(String searchTerm) {
-                snapWebpage("http://google.com");
-                snapSearchResults(searchTerm);
-            }
-        });
-    }
-
-    private void eyesTest(String searchTerm, Consumer<String> f) {
+    @AfterMethod
+    public void teardownEyes() {
         try {
-            eyes.open(driver, config);
-
-            f.accept(searchTerm);
-
             eyes.close();
+        } catch (Throwable t) {
+                t.printStackTrace();
         } finally {
             driver.quit();
             eyes.abortIfNotClosed();
         }
     }
 
-    private void snapWebpage(String url) {
+    public void snapWebpage(String url, By displayed) {
+        eyes.open(driver, config);
         driver.get(url);
-        waitForIsDisplayed(driver, By.id("hplogo"), timeout);
-        eyes.checkWindow("homepage");
+        waitForIsDisplayed(driver, displayed, timeout);
+        eyes.checkWindow("single page");
     }
 
-    private void snapSearchResults(String searchTerm) {
+    public void snapSearchResults(String searchTerm) {
+        snapWebpage("http://google.com", By.id("hplogo"));
+
         driver.findElement(By.name("q")).sendKeys(searchTerm);
         driver.findElement(By.name("f")).submit();
         waitForIsDisplayed(driver, By.id("resultStats"), timeout);

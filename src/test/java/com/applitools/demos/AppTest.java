@@ -11,7 +11,7 @@ public class AppTest
     /**
      * Rigorous Test :-)
      */
-    @Test
+    @Test(enabled=false)
     public void shouldAnswerWithTrue()
     {
         Assert.assertTrue( true );

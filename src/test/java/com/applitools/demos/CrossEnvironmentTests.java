@@ -1,5 +1,7 @@
 package com.applitools.demos;
 
+import com.applitools.eyes.MatchLevel;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -13,6 +15,7 @@ public class CrossEnvironmentTests extends BaseTest {
     public void setupEyes() {
         super.setupEyes();
         config.setBaselineEnvName("default desktop");
+        eyes.setMatchLevel(MatchLevel.LAYOUT);
     }
 
     @Test

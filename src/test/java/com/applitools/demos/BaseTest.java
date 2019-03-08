@@ -7,6 +7,7 @@ import com.applitools.eyes.selenium.Eyes;
 import com.applitools.eyes.selenium.config.Configuration;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -30,7 +31,7 @@ public class BaseTest {
         eyes = new Eyes();
         eyes.setApiKey(System.getenv("APPLITOOLS_API_KEY"));
         eyes.setBatch(batchInfo);
-        eyes.setMatchLevel(MatchLevel.LAYOUT);
+        eyes.setMatchLevel(MatchLevel.STRICT);
 
         config = new Configuration();
         config.setAppName("Zach's Demo Java App");
@@ -42,22 +43,28 @@ public class BaseTest {
         try {
             eyes.close();
         } catch (Throwable t) {
-                t.printStackTrace();
+            t.printStackTrace();
         } finally {
             driver.quit();
             eyes.abortIfNotClosed();
         }
     }
 
-    public void snapWebpage(String url, By displayed) {
+    public void snapWebpage(String url, By displayed, String jsToInject) {
         eyes.open(driver, config);
         driver.get(url);
         waitForIsDisplayed(driver, displayed, timeout);
+
+        if (jsToInject != null) {
+            JavascriptExecutor jsexe = (JavascriptExecutor) driver;
+            jsexe.executeScript(jsToInject);
+        }
+
         eyes.checkWindow("single page");
     }
 
     public void snapSearchResults(String searchTerm) {
-        snapWebpage("http://google.com", By.id("hplogo"));
+        snapWebpage("http://google.com", By.id("hplogo"), null);
 
         driver.findElement(By.name("q")).sendKeys(searchTerm);
         driver.findElement(By.name("f")).submit();

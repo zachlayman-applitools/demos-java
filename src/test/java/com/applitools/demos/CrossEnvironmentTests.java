@@ -20,7 +20,7 @@ public class CrossEnvironmentTests extends BaseTest {
         driver = new ChromeDriver();
         config.setTestName("Cross Environment Test");
 
-        snapWebpage("http://google.com", By.id("hplogo"));
+        snapWebpage("http://google.com", By.id("hplogo"), null);
     }
 
     @Test
@@ -28,7 +28,7 @@ public class CrossEnvironmentTests extends BaseTest {
         driver = new FirefoxDriver();
         config.setTestName("Cross Environment Test");
 
-        snapWebpage("http://google.com", By.id("hplogo"));
+        snapWebpage("http://google.com", By.id("hplogo"), null);
     }
 
     @Test

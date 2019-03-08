@@ -24,7 +24,7 @@ public class BaseTest {
     protected int timeout = 5;
 
     @BeforeClass
-    public void setupEyesConfig() {
+    public void setupEyes() {
         batchInfo = new BatchInfo(null);
 
         eyes = new Eyes();
@@ -37,10 +37,18 @@ public class BaseTest {
         config.setViewportSize(new RectangleSize(1024, 768));
     }
 
+    public void navigateToWebpage(String url) {
+        eyesTest(url, new Consumer<String>() {
+            public void accept(String url) {
+                snapWebpage(url);
+            }
+        });
+    }
+
     public void performSearch(String searchTerm) {
         eyesTest(searchTerm, new Consumer<String>() {
             public void accept(String searchTerm) {
-                snapHomepage();
+                snapWebpage("http://google.com");
                 snapSearchResults(searchTerm);
             }
         });
@@ -59,19 +67,17 @@ public class BaseTest {
         }
     }
 
-    private Boolean snapHomepage() {
-        driver.get("http://google.com");
+    private void snapWebpage(String url) {
+        driver.get(url);
         waitForIsDisplayed(driver, By.id("hplogo"), timeout);
         eyes.checkWindow("homepage");
-        return true;
     }
 
-    private Boolean snapSearchResults(String searchTerm) {
+    private void snapSearchResults(String searchTerm) {
         driver.findElement(By.name("q")).sendKeys(searchTerm);
         driver.findElement(By.name("f")).submit();
         waitForIsDisplayed(driver, By.id("resultStats"), timeout);
         eyes.checkWindow("search results");
-        return true;
     }
 
     private Boolean waitForIsDisplayed(WebDriver driver, By locator, Integer... timeout) {

@@ -1,10 +1,14 @@
 package com.applitools.demos;
 
 import com.applitools.eyes.BatchInfo;
-import com.applitools.eyes.MatchLevel;
-import com.applitools.eyes.RectangleSize;
+import com.applitools.eyes.StdoutLogHandler;
+import com.applitools.eyes.config.SeleniumConfiguration;
 import com.applitools.eyes.selenium.Eyes;
-import com.applitools.eyes.selenium.config.Configuration;
+import com.applitools.eyes.selenium.fluent.Target;
+import com.applitools.eyes.visualgridclient.model.EmulationDevice;
+import com.applitools.eyes.visualgridclient.model.EmulationInfo;
+import com.applitools.eyes.visualgridclient.model.ScreenOrientation;
+import com.applitools.eyes.visualgridclient.services.VisualGridRunner;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -19,23 +23,33 @@ import org.testng.annotations.BeforeClass;
 public class BaseTest {
     protected Eyes eyes;
     protected WebDriver driver;
-    protected Configuration config;
+    protected SeleniumConfiguration config;
     protected BatchInfo batchInfo;
     protected String batchName;
     protected int timeout = 5;
 
     @BeforeClass
     public void setupEyes() {
+        VisualGridRunner vgRunner = new VisualGridRunner(4);
+        vgRunner.setLogHandler(new StdoutLogHandler(true));
+        vgRunner.setApiKey(System.getenv("APPLITOOLS_API_KEY"));
+
         batchInfo = new BatchInfo(batchName);
-
-        eyes = new Eyes();
-        eyes.setApiKey(System.getenv("APPLITOOLS_API_KEY"));
+        eyes = new Eyes(vgRunner);
         eyes.setBatch(batchInfo);
-        eyes.setMatchLevel(MatchLevel.STRICT);
 
-        config = new Configuration();
-        config.setAppName("Zach's Demo Java App");
-        config.setViewportSize(new RectangleSize(1024, 768));
+        config = new SeleniumConfiguration();
+        config.setAppName("Zach's Applitools Java3 Grid Demo");
+        config.setTestName("Applitools Visual Grid Demo");
+
+        config.addBrowser(800, 600, SeleniumConfiguration.BrowserType.FIREFOX);
+        config.addBrowser(1200, 800, SeleniumConfiguration.BrowserType.FIREFOX);
+        config.addBrowser(1920, 1000, SeleniumConfiguration.BrowserType.FIREFOX);
+
+        EmulationDevice emulationDevice = new EmulationDevice(300, 400, 1f, true, ScreenOrientation.LANDSCAPE);
+        EmulationInfo emulationInfo = new EmulationInfo(EmulationInfo.DeviceName.Galaxy_Note_II, ScreenOrientation.PORTRAIT);
+        config.addDeviceEmulation(emulationDevice);
+        config.addDeviceEmulation(emulationInfo);
     }
 
     @AfterMethod
@@ -60,7 +74,7 @@ public class BaseTest {
             jsexe.executeScript(jsToInject);
         }
 
-        eyes.checkWindow("single page");
+        eyes.check("single page", Target.window());
     }
 
     public void snapSearchResults(String searchTerm) {
@@ -69,7 +83,7 @@ public class BaseTest {
         driver.findElement(By.name("q")).sendKeys(searchTerm);
         driver.findElement(By.name("f")).submit();
         waitForIsDisplayed(driver, By.id("resultStats"), timeout);
-        eyes.checkWindow("search results");
+        eyes.check("search result", Target.window());
     }
 
     private Boolean waitForIsDisplayed(WebDriver driver, By locator, Integer... timeout) {

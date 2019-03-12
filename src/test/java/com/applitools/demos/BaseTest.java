@@ -41,7 +41,9 @@ public class BaseTest {
     @AfterMethod
     public void teardownEyes() {
         try {
-            eyes.close();
+            if (eyes.getIsOpen()) {
+                eyes.close();
+            }
         } catch (Throwable t) {
             t.printStackTrace();
         } finally {

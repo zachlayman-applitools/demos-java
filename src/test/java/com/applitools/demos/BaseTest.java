@@ -3,6 +3,7 @@ package com.applitools.demos;
 import com.applitools.eyes.BatchInfo;
 import com.applitools.eyes.MatchLevel;
 import com.applitools.eyes.RectangleSize;
+import com.applitools.eyes.StdoutLogHandler;
 import com.applitools.eyes.selenium.Eyes;
 import com.applitools.eyes.selenium.config.Configuration;
 
@@ -32,6 +33,7 @@ public class BaseTest {
         eyes.setApiKey(System.getenv("APPLITOOLS_API_KEY"));
         eyes.setBatch(batchInfo);
         eyes.setMatchLevel(MatchLevel.STRICT);
+        eyes.setLogHandler(new StdoutLogHandler(true));
 
         config = new Configuration();
         config.setAppName("Zach's Demo Java App");

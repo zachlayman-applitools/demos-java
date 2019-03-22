@@ -23,7 +23,7 @@
     <dependency>
       <groupId>com.applitools</groupId>
       <artifactId>eyes-selenium-java3</artifactId>
-      <version>3.148.1</version>
+      <version>3.150.1</version>
     </dependency>
     <dependency>
       <groupId>org.testng</groupId>

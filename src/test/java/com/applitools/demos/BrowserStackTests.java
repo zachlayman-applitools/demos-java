@@ -15,15 +15,19 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-public class SauceLabsTests extends BaseTest {
+public class BrowserStackTests extends BaseTest {
     private DesiredCapabilities dc;
-    String sauceURL;
+    String browserstackURL;
 
     @Override
     @BeforeClass
     public void setupEyes() {
         batchInfo = new BatchInfo(batchName);
 
+        String u = System.getenv("BROWSERSTACK_USERNAME");
+        String k = System.getenv("BROWSERSTACK_ACCESS_KEY");
+        browserstackURL = "https://" + u + ":" + k + "@hub-cloud.browserstack.com/wd/hub";
+  
         eyes = new Eyes();
         eyes.setApiKey(System.getenv("APPLITOOLS_API_KEY"));
         eyes.setBatch(batchInfo);
@@ -31,27 +35,23 @@ public class SauceLabsTests extends BaseTest {
         eyes.setLogHandler(new StdoutLogHandler(true));
 
         config = new Configuration();
-        config.setAppName("Zach's Demo Java App");
+        config.setAppName("Zach's BS Tests");
         
-        // https://wiki.saucelabs.com/display/DOCS/Platform+Configurator#/
         dc = new DesiredCapabilities();
-        dc.setCapability("appiumVersion", "1.9.1");
-        dc.setCapability("deviceName","Samsung Galaxy S7 Edge GoogleAPI Emulator");
-        dc.setCapability("deviceOrientation", "portrait");
-        dc.setCapability("browserName", "Chrome");
-        dc.setCapability("platformVersion", "8.1");
-        dc.setCapability("platformName","Android");
-
-        sauceURL = String.format(
-           "http://%s:%s@ondemand.saucelabs.com:80/wd/hub",
-           System.getenv("SAUCE_USERNAME"), System.getenv("SAUCE_ACCESS_KEY"));
+        dc.setCapability("browserName", "safari");
+        dc.setCapability("device", "iPhone XS");
+        dc.setCapability("realMobile", "true");
+        dc.setCapability("os_version", "12");
+        dc.setCapability("browserstack.console", "verbose");
+        dc.setCapability("browserstack.networkLogs", "true");
+        
     }
-
+    
     @Test
-    public void saucePage() throws MalformedURLException {
-        driver = new RemoteWebDriver(new URL(sauceURL), dc);
-        config.setTestName("Sauce Test");
+    public void defaultTest() throws MalformedURLException {
+        driver = new RemoteWebDriver(new URL(browserstackURL), dc);
+        config.setTestName("BrowserStack Test");
 
-        snapWebpage("https://ehp-prod.literatumonline.com", By.id("logo"), null);
+        snapWebpage("http://google.com", By.id("gb"), null);
     }
 }

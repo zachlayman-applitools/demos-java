@@ -6,6 +6,7 @@ import com.applitools.eyes.RectangleSize;
 import com.applitools.eyes.StdoutLogHandler;
 import com.applitools.eyes.selenium.Eyes;
 import com.applitools.eyes.selenium.config.Configuration;
+import com.applitools.eyes.selenium.fluent.Target;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -64,7 +65,7 @@ public class BaseTest {
             jsexe.executeScript(jsToInject);
         }
 
-        eyes.checkWindow("single page");
+        eyes.check(Target.window());
     }
 
     public void snapSearchResults(String searchTerm) {

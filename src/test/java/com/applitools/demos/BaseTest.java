@@ -77,6 +77,15 @@ public class BaseTest {
         eyes.checkWindow("search results");
     }
 
+    public void snapSearchResultsMobile(String searchTerm) {
+        snapWebpage("http://google.com", By.id("gb"), null);
+
+        driver.findElement(By.name("q")).sendKeys(searchTerm);
+        driver.findElement(By.className("Tg7LZd")).submit();
+        waitForIsDisplayed(driver, By.id("resultStats"), timeout);
+        eyes.checkWindow("search results");
+    }
+
     private Boolean waitForIsDisplayed(WebDriver driver, By locator, Integer... timeout) {
         try {
             waitFor(driver, ExpectedConditions.visibilityOfElementLocated(locator),

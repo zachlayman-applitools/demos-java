@@ -28,6 +28,7 @@ import javax.imageio.metadata.IIOMetadataNode;
 import javax.imageio.stream.FileImageOutputStream;
 import javax.imageio.stream.ImageOutputStream;
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSocketFactory;
 
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
@@ -244,7 +245,44 @@ public class ApplitoolsTestResultsHandler {
 
     private String readJsonStringFromUrl(String url) throws Exception {
 
-        HttpsURLConnection.setDefaultSSLSocketFactory(new sun.security.ssl.SSLSocketFactoryImpl());
+        HttpsURLConnection.setDefaultSSLSocketFactory(new SSLSocketFactory(){
+        
+            @Override
+            public Socket createSocket(InetAddress arg0, int arg1, InetAddress arg2, int arg3) throws IOException {
+                return null;
+            }
+        
+            @Override
+            public Socket createSocket(String arg0, int arg1, InetAddress arg2, int arg3)
+                    throws IOException, UnknownHostException {
+                return null;
+            }
+        
+            @Override
+            public Socket createSocket(InetAddress arg0, int arg1) throws IOException {
+                return null;
+            }
+        
+            @Override
+            public Socket createSocket(String arg0, int arg1) throws IOException, UnknownHostException {
+                return null;
+            }
+        
+            @Override
+            public String[] getSupportedCipherSuites() {
+                return null;
+            }
+        
+            @Override
+            public String[] getDefaultCipherSuites() {
+                return null;
+            }
+        
+            @Override
+            public Socket createSocket(Socket arg0, String arg1, int arg2, boolean arg3) throws IOException {
+                return null;
+            }
+        });
         CloseableHttpResponse response = null;
         HttpGet get = new HttpGet(url);
 

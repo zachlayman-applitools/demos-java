@@ -32,13 +32,13 @@ public class BaseTest {
 
         eyes = new Eyes();
         eyes.setApiKey(System.getenv("APPLITOOLS_API_KEY"));
-        eyes.setBatch(batchInfo);
         eyes.setMatchLevel(MatchLevel.STRICT);
         eyes.setLogHandler(new StdoutLogHandler(true));
 
         config = new Configuration();
         config.setAppName("Zach's Demo Java App");
         config.setViewportSize(new RectangleSize(1024, 768));
+        config.setBatch(batchInfo);
     }
 
     @AfterMethod

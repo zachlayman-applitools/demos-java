@@ -47,7 +47,7 @@ import com.applitools.eyes.TestResults;
 
 public class ApplitoolsTestResultsHandler {
 
-    private static final String VERSION = "1.3.3";
+    // private static final String VERSION = "1.3.3";
     protected static final String STEP_RESULT_API_FORMAT = "/api/sessions/batches/%s/%s/?ApiKey=%s&format=json";
     private static final String RESULT_REGEX = "(?<serverURL>^.+)\\/app\\/batches\\/(?<batchId>\\d+)\\/(?<sessionId>\\d+).*$";
     private static final String IMAGE_TMPL = "%s/step %s %s-%s.png";
@@ -289,7 +289,7 @@ public class ApplitoolsTestResultsHandler {
             for (int i = 0; i < urls.length; i++) {
                 if (null != urls[i]) {
 
-                    String windowsCompatibleStepName = makeWindowsFileNameCompatible(stepsNames[i]);
+                    // String windowsCompatibleStepName = makeWindowsFileNameCompatible(stepsNames[i]);
                     CloseableHttpResponse response = null;
                     HttpGet get = new HttpGet(urls[i].toString());
                     CloseableHttpClient client = getCloseableHttpClient();
@@ -381,36 +381,36 @@ public class ApplitoolsTestResultsHandler {
         }
     }
 
-    private void saveImagesInFolder(String path, String imageType, URL[] imageURLS)
-            throws InterruptedException, IOException, JSONException {
-        for (int i = 0; i < imageURLS.length; i++) {
-            if (imageURLS[i] == null) {
-                System.out.println("No " + imageType + " image in step " + (i + 1) + ": " + stepsNames[i]);
-            } else {
-                String windowsCompatibleStepName = makeWindowsFileNameCompatible(stepsNames[i]);
+    // private void saveImagesInFolder(String path, String imageType, URL[] imageURLS)
+    //         throws InterruptedException, IOException, JSONException {
+    //     for (int i = 0; i < imageURLS.length; i++) {
+    //         if (imageURLS[i] == null) {
+    //             System.out.println("No " + imageType + " image in step " + (i + 1) + ": " + stepsNames[i]);
+    //         } else {
+    //             String windowsCompatibleStepName = makeWindowsFileNameCompatible(stepsNames[i]);
 
-                CloseableHttpResponse response = null;
-                HttpGet get = new HttpGet(imageURLS[i].toString());
-                CloseableHttpClient client = getCloseableHttpClient();
+    //             CloseableHttpResponse response = null;
+    //             HttpGet get = new HttpGet(imageURLS[i].toString());
+    //             CloseableHttpClient client = getCloseableHttpClient();
 
-                response = client.execute(get);
-                InputStream is = response.getEntity().getContent();
-                try {
-                    BufferedImage bi = ImageIO.read(is);
-                    ImageIO.write(bi, "jpg",
-                            new File(String.format(IMAGE_TMPL, path, (i + 1), windowsCompatibleStepName, imageType)));
-                } finally {
-                    if (null != is)
-                        is.close();
-                    if (null != client)
-                        client.close();
-                    if (null != response)
-                        response.close();
-                }
+    //             response = client.execute(get);
+    //             InputStream is = response.getEntity().getContent();
+    //             try {
+    //                 BufferedImage bi = ImageIO.read(is);
+    //                 ImageIO.write(bi, "jpg",
+    //                         new File(String.format(IMAGE_TMPL, path, (i + 1), windowsCompatibleStepName, imageType)));
+    //             } finally {
+    //                 if (null != is)
+    //                     is.close();
+    //                 if (null != client)
+    //                     client.close();
+    //                 if (null != response)
+    //                     response.close();
+    //             }
 
-            }
-        }
-    }
+    //         }
+    //     }
+    // }
 
     private String makeWindowsFileNameCompatible(String stepName) {
         stepName = stepName.replace('/', '~');
@@ -693,31 +693,31 @@ public class ApplitoolsTestResultsHandler {
          * int timeBetweenFramesMS, boolean loopContinuously) {
          */
 
-        public static void main(String[] args) throws Exception {
-            if (args.length > 1) {
-                // grab the output image type from the first image in the sequence
-                BufferedImage firstImage = ImageIO.read(new File(args[0]));
+        // public static void main(String[] args) throws Exception {
+        //     if (args.length > 1) {
+        //         // grab the output image type from the first image in the sequence
+        //         BufferedImage firstImage = ImageIO.read(new File(args[0]));
 
-                // create a new BufferedOutputStream with the last argument
-                ImageOutputStream output = new FileImageOutputStream(new File(args[args.length - 1]));
+        //         // create a new BufferedOutputStream with the last argument
+        //         ImageOutputStream output = new FileImageOutputStream(new File(args[args.length - 1]));
 
-                // create a gif sequence with the type of the first image, 1 second
-                // between frames, which loops continuously
-                GifSequenceWriter writer = new GifSequenceWriter(output, firstImage.getType(), 1, false);
+        //         // create a gif sequence with the type of the first image, 1 second
+        //         // between frames, which loops continuously
+        //         GifSequenceWriter writer = new GifSequenceWriter(output, firstImage.getType(), 1, false);
 
-                // write out the first image to our sequence...
-                writer.writeToSequence(firstImage);
-                for (int i = 1; i < args.length - 1; i++) {
-                    BufferedImage nextImage = ImageIO.read(new File(args[i]));
-                    writer.writeToSequence(nextImage);
-                }
+        //         // write out the first image to our sequence...
+        //         writer.writeToSequence(firstImage);
+        //         for (int i = 1; i < args.length - 1; i++) {
+        //             BufferedImage nextImage = ImageIO.read(new File(args[i]));
+        //             writer.writeToSequence(nextImage);
+        //         }
 
-                writer.close();
-                output.close();
-            } else {
-                System.out.println("Usage: java GifSequenceWriter [list of gif files] [output file]");
-            }
-        }
+        //         writer.close();
+        //         output.close();
+        //     } else {
+        //         System.out.println("Usage: java GifSequenceWriter [list of gif files] [output file]");
+        //     }
+        // }
     }
 
     public void SetPathPrefixStructure(String pathPrefix) throws JSONException {

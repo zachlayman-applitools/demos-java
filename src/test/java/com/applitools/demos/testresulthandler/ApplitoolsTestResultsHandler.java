@@ -73,7 +73,8 @@ public class ApplitoolsTestResultsHandler {
         if (!Path.contains("/" + batchID + "/" + sessionID)) {
             Path = Path + "/" + batchID + "/" + sessionID;
             File folder = new File(Path);
-            if (!folder.exists()) folder.mkdirs();
+            if (!folder.exists())
+                folder.mkdirs();
         }
         return Path;
 
@@ -83,7 +84,8 @@ public class ApplitoolsTestResultsHandler {
     private List<BufferedImage> currentImages;
     private List<BufferedImage> diffImages;
 
-    public ApplitoolsTestResultsHandler(TestResults testResults, String viewkey, String ProxyServer, String ProxyPort, String ProxyUser, String ProxyPassword) throws Exception {
+    public ApplitoolsTestResultsHandler(TestResults testResults, String viewkey, String ProxyServer, String ProxyPort,
+            String ProxyUser, String ProxyPassword) throws Exception {
 
         if ((ProxyServer != "") && (ProxyPort != "")) {
             proxy = new HttpHost(ProxyServer, Integer.parseInt(ProxyPort));
@@ -100,12 +102,14 @@ public class ApplitoolsTestResultsHandler {
         this.testResults = testResults;
         Pattern pattern = Pattern.compile(RESULT_REGEX);
         Matcher matcher = pattern.matcher(testResults.getUrl());
-        if (!matcher.find()) throw new Exception("Unexpected result URL - Not parsable");
+        if (!matcher.find())
+            throw new Exception("Unexpected result URL - Not parsable");
         this.batchID = matcher.group("batchId");
         this.sessionID = matcher.group("sessionId");
         this.serverURL = matcher.group("serverURL");
 
-        String url = String.format(serverURL + STEP_RESULT_API_FORMAT, this.batchID, this.sessionID, this.applitolsViewKey);
+        String url = String.format(serverURL + STEP_RESULT_API_FORMAT, this.batchID, this.sessionID,
+                this.applitolsViewKey);
         String json = readJsonStringFromUrl(url);
         this.testData = new JSONObject(json);
         this.stepsNames = calculateStepsNames();
@@ -117,7 +121,8 @@ public class ApplitoolsTestResultsHandler {
 
     }
 
-    public ApplitoolsTestResultsHandler(TestResults testResults, String viewkey, String ProxyServer, String ProxyPort) throws Exception {
+    public ApplitoolsTestResultsHandler(TestResults testResults, String viewkey, String ProxyServer, String ProxyPort)
+            throws Exception {
         this(testResults, viewkey, ProxyServer, ProxyPort, "", "");
     }
 
@@ -130,21 +135,24 @@ public class ApplitoolsTestResultsHandler {
         for (int step = 0; step < this.testResults.getSteps(); ++step) {
             if ((stepsState[step] == ResultStatus.UNRESOLVED) || (stepsState[step] == ResultStatus.FAILED)) {
                 try {
-                    urls[step] = new URL(String.format(DiffsUrlTemplate, this.serverURL, this.batchID, this.sessionID, step + 1, this.applitolsViewKey));
+                    urls[step] = new URL(String.format(DiffsUrlTemplate, this.serverURL, this.batchID, this.sessionID,
+                            step + 1, this.applitolsViewKey));
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
-            } else urls[step] = null;
+            } else
+                urls[step] = null;
         }
         return urls;
     }
 
     public ResultStatus[] calculateStepResults() {
-        if (stepsState == null) try {
-            stepsState = prepareStepResults();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        if (stepsState == null)
+            try {
+                stepsState = prepareStepResults();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         return stepsState;
     }
 
@@ -180,8 +188,8 @@ public class ApplitoolsTestResultsHandler {
 
     private ResultStatus checkStepIfFailedOrUnresolved(int i) throws JSONException {
 
-//        if((this.testData.getString("status")!=null)&&(this.testData.getString("status").equals("Unresolved")))
-//            return ResultStatus.UNRESOLVED;
+        // if((this.testData.getString("status")!=null)&&(this.testData.getString("status").equals("Unresolved")))
+        // return ResultStatus.UNRESOLVED;
         if (getBugRegionsOfStep(i).length() == 0) {
             return ResultStatus.UNRESOLVED;
         } else {
@@ -333,7 +341,6 @@ public class ApplitoolsTestResultsHandler {
         saveImagesInFolder(preparePath(path), "Baseline");
     }
 
-
     public void downloadCurrentImages(String path) throws IOException, InterruptedException, JSONException {
         saveImagesInFolder(preparePath(path), "Current");
     }
@@ -342,7 +349,6 @@ public class ApplitoolsTestResultsHandler {
         downloadBaselineImages(path);
         downloadCurrentImages(path);
     }
-
 
     private void saveImagesInFolder(String path, String imageType) {
         List<BufferedImage> imagesList = null;
@@ -357,24 +363,26 @@ public class ApplitoolsTestResultsHandler {
 
         if (null != imagesList) {
             for (int i = 0; i < imagesList.size(); i++) {
-                if (null!=imagesList.get(i)){
+                if (null != imagesList.get(i)) {
                     String windowsCompatibleStepName = makeWindowsFileNameCompatible(stepsNames[i]);
-                    File outputfile = new File(String.format(IMAGE_TMPL, path, (i + 1), windowsCompatibleStepName, imageType));
+                    File outputfile = new File(
+                            String.format(IMAGE_TMPL, path, (i + 1), windowsCompatibleStepName, imageType));
                     try {
                         ImageIO.write(imagesList.get(i), "jpg", outputfile);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }
-                else{
-                    System.out.println("No "+imageType+" image was downloaded at step " +(i+1)+ "as this step status is "+resultStatus[i]);
+                } else {
+                    System.out.println("No " + imageType + " image was downloaded at step " + (i + 1)
+                            + "as this step status is " + resultStatus[i]);
                 }
 
             }
         }
     }
 
-    private void saveImagesInFolder(String path, String imageType, URL[] imageURLS) throws InterruptedException, IOException, JSONException {
+    private void saveImagesInFolder(String path, String imageType, URL[] imageURLS)
+            throws InterruptedException, IOException, JSONException {
         for (int i = 0; i < imageURLS.length; i++) {
             if (imageURLS[i] == null) {
                 System.out.println("No " + imageType + " image in step " + (i + 1) + ": " + stepsNames[i]);
@@ -389,7 +397,8 @@ public class ApplitoolsTestResultsHandler {
                 InputStream is = response.getEntity().getContent();
                 try {
                     BufferedImage bi = ImageIO.read(is);
-                    ImageIO.write(bi, "jpg", new File(String.format(IMAGE_TMPL, path, (i + 1), windowsCompatibleStepName, imageType)));
+                    ImageIO.write(bi, "jpg",
+                            new File(String.format(IMAGE_TMPL, path, (i + 1), windowsCompatibleStepName, imageType)));
                 } finally {
                     if (null != is)
                         is.close();
@@ -427,11 +436,13 @@ public class ApplitoolsTestResultsHandler {
         for (int i = 0; i < imageIds.length; i++) {
             if (imageIds[i] == null) {
                 URLS[i] = null;
-            } else try {
-                URLS[i] = new URL(String.format("%s/api/images/%s?apiKey=%s", this.serverURL, imageIds[i], this.applitolsViewKey, this.applitolsViewKey));
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+            } else
+                try {
+                    URLS[i] = new URL(String.format("%s/api/images/%s?apiKey=%s", this.serverURL, imageIds[i],
+                            this.applitolsViewKey, this.applitolsViewKey));
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
         }
         return URLS;
     }
@@ -481,37 +492,43 @@ public class ApplitoolsTestResultsHandler {
 
     public void downloadAnimateGiff(String path, int timeBetweenFramesMS) throws JSONException {
 
-        if (testResults.getMismatches() + testResults.getMatches() > 0) // only if the test isn't new and not all of his steps are missing
+        if (testResults.getMismatches() + testResults.getMatches() > 0) // only if the test isn't new and not all of his
+                                                                        // steps are missing
         {
             URL[] baselienImagesURL = getBaselineImagesURLS();
             URL[] currentImagesURL = getCurrentImagesURLS();
             URL[] diffImagesURL = getDiffUrls();
 
-            List<BufferedImage> base = getBaselineBufferedImages();  // get Baseline Images as BufferedImage
-            List<BufferedImage> curr = getCurrentBufferedImages();   // get Current Images as BufferedImage
-            List<BufferedImage> diff = getDiffsBufferedImages();     // get Diff Images as BufferedImage
+            List<BufferedImage> base = getBaselineBufferedImages(); // get Baseline Images as BufferedImage
+            List<BufferedImage> curr = getCurrentBufferedImages(); // get Current Images as BufferedImage
+            List<BufferedImage> diff = getDiffsBufferedImages(); // get Diff Images as BufferedImage
 
             for (int i = 0; i < stepsState.length; i++) {
-                if ((stepsState[i] == ResultStatus.UNRESOLVED)||(stepsState[i] == ResultStatus.FAILED)) {
+                if ((stepsState[i] == ResultStatus.UNRESOLVED) || (stepsState[i] == ResultStatus.FAILED)) {
                     List<BufferedImage> list = new ArrayList<BufferedImage>();
                     try {
-                        if (currentImagesURL[i] != null) list.add(curr.get(i));
-                        if (baselienImagesURL[i] != null) list.add(base.get(i));
-                        if (diffImagesURL[i] != null) list.add(diff.get(i));
+                        if (currentImagesURL[i] != null)
+                            list.add(curr.get(i));
+                        if (baselienImagesURL[i] != null)
+                            list.add(base.get(i));
+                        if (diffImagesURL[i] != null)
+                            list.add(diff.get(i));
                         String tempPath = preparePath(path) + "/" + (i + 1) + " - AnimatedGiff.gif";
                         createAnimatedGif(list, new File(tempPath), timeBetweenFramesMS);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 } else {
-                    System.out.println("No Animated GIf created for Step " + (i + 1) + " " + stepsNames[i] + " as it is " + stepsState[i]);
+                    System.out.println("No Animated GIf created for Step " + (i + 1) + " " + stepsNames[i]
+                            + " as it is " + stepsState[i]);
                 }
             }
         }
     }
 
     private String getSessionInfo(String sessionId, String batchId) throws IOException {
-        URL url = new URL(String.format("%s/api/sessions/batches/%s/%s?apiKey=%s&format=json", this.serverURL, batchId, sessionId, this.applitolsViewKey));
+        URL url = new URL(String.format("%s/api/sessions/batches/%s/%s?apiKey=%s&format=json", this.serverURL, batchId,
+                sessionId, this.applitolsViewKey));
 
         HttpGet get = new HttpGet(url.toString());
         CloseableHttpClient client = getCloseableHttpClient();
@@ -533,7 +550,8 @@ public class ApplitoolsTestResultsHandler {
         }
     }
 
-    private static void createAnimatedGif(List<BufferedImage> images, File target, int timeBetweenFramesMS) throws IOException {
+    private static void createAnimatedGif(List<BufferedImage> images, File target, int timeBetweenFramesMS)
+            throws IOException {
         ImageOutputStream output = new FileImageOutputStream(target);
         GifSequenceWriter writer = null;
 
@@ -543,7 +561,8 @@ public class ApplitoolsTestResultsHandler {
             for (BufferedImage image : images) {
                 BufferedImage normalized = new BufferedImage(max.width, max.height, image.getType());
                 normalized.getGraphics().drawImage(image, 0, 0, null);
-                if (writer == null) writer = new GifSequenceWriter(output, image.getType(), timeBetweenFramesMS, true);
+                if (writer == null)
+                    writer = new GifSequenceWriter(output, image.getType(), timeBetweenFramesMS, true);
                 writer.writeToSequence(normalized);
             }
         } finally {
@@ -555,8 +574,10 @@ public class ApplitoolsTestResultsHandler {
     private static Dimension getMaxSize(List<BufferedImage> images) {
         Dimension max = new Dimension(0, 0);
         for (BufferedImage image : images) {
-            if (max.height < image.getHeight()) max.height = image.getHeight();
-            if (max.width < image.getWidth()) max.width = image.getWidth();
+            if (max.height < image.getHeight())
+                max.height = image.getHeight();
+            if (max.width < image.getWidth())
+                max.width = image.getWidth();
         }
         return max;
     }
@@ -576,48 +597,31 @@ public class ApplitoolsTestResultsHandler {
          * @throws IIOException if no gif ImageWriters are found
          * @author Elliot Kroo (elliot[at]kroo[dot]net)
          */
-        public GifSequenceWriter(
-                ImageOutputStream outputStream,
-                int imageType,
-                int timeBetweenFramesMS,
+        public GifSequenceWriter(ImageOutputStream outputStream, int imageType, int timeBetweenFramesMS,
                 boolean loopContinuously) throws IIOException, IOException {
             // my method to create a writer
             gifWriter = getWriter();
             imageWriteParam = gifWriter.getDefaultWriteParam();
-            ImageTypeSpecifier imageTypeSpecifier =
-                    ImageTypeSpecifier.createFromBufferedImageType(imageType);
+            ImageTypeSpecifier imageTypeSpecifier = ImageTypeSpecifier.createFromBufferedImageType(imageType);
 
-            imageMetaData =
-                    gifWriter.getDefaultImageMetadata(imageTypeSpecifier,
-                            imageWriteParam);
+            imageMetaData = gifWriter.getDefaultImageMetadata(imageTypeSpecifier, imageWriteParam);
 
             String metaFormatName = imageMetaData.getNativeMetadataFormatName();
 
-            IIOMetadataNode root = (IIOMetadataNode)
-                    imageMetaData.getAsTree(metaFormatName);
+            IIOMetadataNode root = (IIOMetadataNode) imageMetaData.getAsTree(metaFormatName);
 
-            IIOMetadataNode graphicsControlExtensionNode = getNode(
-                    root,
-                    "GraphicControlExtension");
+            IIOMetadataNode graphicsControlExtensionNode = getNode(root, "GraphicControlExtension");
 
             graphicsControlExtensionNode.setAttribute("disposalMethod", "none");
             graphicsControlExtensionNode.setAttribute("userInputFlag", "FALSE");
-            graphicsControlExtensionNode.setAttribute(
-                    "transparentColorFlag",
-                    "FALSE");
-            graphicsControlExtensionNode.setAttribute(
-                    "delayTime",
-                    Integer.toString(timeBetweenFramesMS / 10));
-            graphicsControlExtensionNode.setAttribute(
-                    "transparentColorIndex",
-                    "0");
+            graphicsControlExtensionNode.setAttribute("transparentColorFlag", "FALSE");
+            graphicsControlExtensionNode.setAttribute("delayTime", Integer.toString(timeBetweenFramesMS / 10));
+            graphicsControlExtensionNode.setAttribute("transparentColorIndex", "0");
 
             IIOMetadataNode commentsNode = getNode(root, "CommentExtensions");
             commentsNode.setAttribute("CommentExtension", "Created by MAH");
 
-            IIOMetadataNode appEntensionsNode = getNode(
-                    root,
-                    "ApplicationExtensions");
+            IIOMetadataNode appEntensionsNode = getNode(root, "ApplicationExtensions");
 
             IIOMetadataNode child = new IIOMetadataNode("ApplicationExtension");
 
@@ -626,8 +630,7 @@ public class ApplitoolsTestResultsHandler {
 
             int loop = loopContinuously ? 0 : 1;
 
-            child.setUserObject(new byte[]{0x1, (byte) (loop & 0xFF), (byte)
-                    ((loop >> 8) & 0xFF)});
+            child.setUserObject(new byte[] { 0x1, (byte) (loop & 0xFF), (byte) ((loop >> 8) & 0xFF) });
             appEntensionsNode.appendChild(child);
 
             imageMetaData.setFromTree(metaFormatName, root);
@@ -638,12 +641,7 @@ public class ApplitoolsTestResultsHandler {
         }
 
         public void writeToSequence(RenderedImage img) throws IOException {
-            gifWriter.writeToSequence(
-                    new IIOImage(
-                            img,
-                            null,
-                            imageMetaData),
-                    imageWriteParam);
+            gifWriter.writeToSequence(new IIOImage(img, null, imageMetaData), imageWriteParam);
         }
 
         /**
@@ -678,13 +676,10 @@ public class ApplitoolsTestResultsHandler {
          * @param nodeName the name of the child node.
          * @return the child node, if found or a new node created with the given name.
          */
-        private static IIOMetadataNode getNode(
-                IIOMetadataNode rootNode,
-                String nodeName) {
+        private static IIOMetadataNode getNode(IIOMetadataNode rootNode, String nodeName) {
             int nNodes = rootNode.getLength();
             for (int i = 0; i < nNodes; i++) {
-                if (rootNode.item(i).getNodeName().compareToIgnoreCase(nodeName)
-                        == 0) {
+                if (rootNode.item(i).getNodeName().compareToIgnoreCase(nodeName) == 0) {
                     return ((IIOMetadataNode) rootNode.item(i));
                 }
             }
@@ -694,11 +689,8 @@ public class ApplitoolsTestResultsHandler {
         }
 
         /**
-         * public GifSequenceWriter(
-         * BufferedOutputStream outputStream,
-         * int imageType,
-         * int timeBetweenFramesMS,
-         * boolean loopContinuously) {
+         * public GifSequenceWriter( BufferedOutputStream outputStream, int imageType,
+         * int timeBetweenFramesMS, boolean loopContinuously) {
          */
 
         public static void main(String[] args) throws Exception {
@@ -707,13 +699,11 @@ public class ApplitoolsTestResultsHandler {
                 BufferedImage firstImage = ImageIO.read(new File(args[0]));
 
                 // create a new BufferedOutputStream with the last argument
-                ImageOutputStream output =
-                        new FileImageOutputStream(new File(args[args.length - 1]));
+                ImageOutputStream output = new FileImageOutputStream(new File(args[args.length - 1]));
 
                 // create a gif sequence with the type of the first image, 1 second
                 // between frames, which loops continuously
-                GifSequenceWriter writer =
-                        new GifSequenceWriter(output, firstImage.getType(), 1, false);
+                GifSequenceWriter writer = new GifSequenceWriter(output, firstImage.getType(), 1, false);
 
                 // write out the first image to our sequence...
                 writer.writeToSequence(firstImage);
@@ -725,8 +715,7 @@ public class ApplitoolsTestResultsHandler {
                 writer.close();
                 output.close();
             } else {
-                System.out.println(
-                        "Usage: java GifSequenceWriter [list of gif files] [output file]");
+                System.out.println("Usage: java GifSequenceWriter [list of gif files] [output file]");
             }
         }
     }
@@ -749,7 +738,10 @@ public class ApplitoolsTestResultsHandler {
     }
 
     public String getViewportSize() throws JSONException {
-        return this.testData.getJSONObject("startInfo").getJSONObject("environment").getJSONObject("displaySize").optString("width").toString() + "x" + this.testData.getJSONObject("startInfo").getJSONObject("environment").getJSONObject("displaySize").optString("height").toString();
+        return this.testData.getJSONObject("startInfo").getJSONObject("environment").getJSONObject("displaySize")
+                .optString("width").toString() + "x"
+                + this.testData.getJSONObject("startInfo").getJSONObject("environment").getJSONObject("displaySize")
+                        .optString("height").toString();
     }
 
     public String getHostingOS() throws JSONException {
@@ -762,6 +754,3 @@ public class ApplitoolsTestResultsHandler {
     }
 
 }
-
-
-

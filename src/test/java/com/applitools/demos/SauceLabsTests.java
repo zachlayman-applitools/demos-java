@@ -35,12 +35,10 @@ public class SauceLabsTests extends BaseTest {
         
         // https://wiki.saucelabs.com/display/DOCS/Platform+Configurator#/
         dc = new DesiredCapabilities();
-        dc.setCapability("appiumVersion", "1.9.1");
-        dc.setCapability("deviceName","Samsung Galaxy S7 Edge GoogleAPI Emulator");
-        dc.setCapability("deviceOrientation", "portrait");
         dc.setCapability("browserName", "Chrome");
-        dc.setCapability("platformVersion", "8.1");
-        dc.setCapability("platformName","Android");
+        dc.setCapability("platform", "macOS 10.14");
+        dc.setCapability("version", "72.0");
+        dc.setCapability("screenResolution", "1376x1032");
 
         sauceURL = String.format(
            "http://%s:%s@ondemand.saucelabs.com:80/wd/hub",
@@ -52,6 +50,6 @@ public class SauceLabsTests extends BaseTest {
         driver = new RemoteWebDriver(new URL(sauceURL), dc);
         config.setTestName("Sauce Test");
 
-        snapWebpage("https://ehp-prod.literatumonline.com", By.id("logo"), null);
+        snapWebpage("https://www.yahoosmallbusiness.com/stores", By.id("logo"), null);
     }
 }

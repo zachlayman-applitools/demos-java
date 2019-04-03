@@ -86,7 +86,7 @@ public class BaseTest {
         eyes.checkWindow("search results");
     }
 
-    private Boolean waitForIsDisplayed(WebDriver driver, By locator, Integer... timeout) {
+    public Boolean waitForIsDisplayed(WebDriver driver, By locator, Integer... timeout) {
         try {
             waitFor(driver, ExpectedConditions.visibilityOfElementLocated(locator),
                     (timeout.length > 0 ? timeout[0] : null));

@@ -33,7 +33,7 @@ public class BaseTest {
 
         config = new Configuration();
         config.setAppName("Zach's Demo Java App");
-        config.setViewportSize(new RectangleSize(1024, 768));
+        config.setViewportSize(new RectangleSize(1600, 900));
         config.setBatch(batchInfo);
         config.setApiKey(System.getenv("APPLITOOLS_API_KEY"));
         config.setMatchLevel(MatchLevel.STRICT);

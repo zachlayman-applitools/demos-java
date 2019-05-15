@@ -4,8 +4,8 @@ import com.applitools.eyes.BatchInfo;
 import com.applitools.eyes.MatchLevel;
 import com.applitools.eyes.RectangleSize;
 import com.applitools.eyes.StdoutLogHandler;
+import com.applitools.eyes.selenium.Configuration;
 import com.applitools.eyes.selenium.Eyes;
-import com.applitools.eyes.selenium.config.Configuration;
 import com.applitools.eyes.selenium.fluent.Target;
 
 import org.openqa.selenium.By;
@@ -30,15 +30,18 @@ public class BaseTest {
     public void setupEyes() {
         batchInfo = new BatchInfo(batchName);
 
-        eyes = new Eyes();
-        eyes.setApiKey(System.getenv("APPLITOOLS_API_KEY"));
-        eyes.setMatchLevel(MatchLevel.STRICT);
-        eyes.setLogHandler(new StdoutLogHandler(true));
 
         config = new Configuration();
         config.setAppName("Zach's Demo Java App");
         config.setViewportSize(new RectangleSize(1024, 768));
         config.setBatch(batchInfo);
+        config.setApiKey(System.getenv("APPLITOOLS_API_KEY"));
+        config.setMatchLevel(MatchLevel.STRICT);
+        config.setTestName("Default Test Name");
+
+        eyes = new Eyes();
+        eyes.setConfiguration(config);
+        eyes.setLogHandler(new StdoutLogHandler(true));
     }
 
     @AfterMethod
@@ -56,7 +59,7 @@ public class BaseTest {
     }
 
     public void snapWebpage(String url, By displayed, String jsToInject) {
-        eyes.open(driver, config);
+        eyes.open(driver);
         driver.get(url);
         waitForIsDisplayed(driver, displayed, timeout);
 

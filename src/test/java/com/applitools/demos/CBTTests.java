@@ -5,8 +5,8 @@ import java.net.URL;
 
 import com.applitools.eyes.BatchInfo;
 import com.applitools.eyes.MatchLevel;
+import com.applitools.eyes.selenium.Configuration;
 import com.applitools.eyes.selenium.Eyes;
-import com.applitools.eyes.selenium.config.Configuration;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -23,13 +23,14 @@ public class CBTTests extends BaseTest {
     public void setupEyes() {
         batchInfo = new BatchInfo(batchName);
 
-        eyes = new Eyes();
-        eyes.setApiKey(System.getenv("APPLITOOLS_API_KEY"));
-        eyes.setBatch(batchInfo);
-        eyes.setMatchLevel(MatchLevel.STRICT);
-
         config = new Configuration();
         config.setAppName("Zach's Demo Java App");
+        config.setApiKey(System.getenv("APPLITOOLS_API_KEY"));
+        config.setBatch(batchInfo);
+        config.setMatchLevel(MatchLevel.STRICT);
+        
+        eyes = new Eyes();
+        eyes.setConfiguration(config);
         
         dc = new DesiredCapabilities();
         dc.setCapability("browserName", "Chrome");

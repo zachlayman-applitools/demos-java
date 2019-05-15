@@ -5,9 +5,8 @@ import com.applitools.eyes.BatchInfo;
 import com.applitools.eyes.MatchLevel;
 import com.applitools.eyes.RectangleSize;
 import com.applitools.eyes.StdoutLogHandler;
+import com.applitools.eyes.selenium.Configuration;
 import com.applitools.eyes.selenium.Eyes;
-import com.applitools.eyes.selenium.StitchMode;
-import com.applitools.eyes.selenium.config.Configuration;
 import com.applitools.eyes.selenium.fluent.Target;
 
 import org.openqa.selenium.By;
@@ -23,14 +22,16 @@ public class I_28553_CodePenRegion extends BaseTest {
     public void setupEyes() {
         batchInfo = new BatchInfo("I_28553_CodePenRegion");
 
-        eyes = new Eyes();
-        eyes.setApiKey(System.getenv("APPLITOOLS_API_KEY"));
-        eyes.setBatch(batchInfo);
-        eyes.setMatchLevel(MatchLevel.STRICT);
-        eyes.setLogHandler(new StdoutLogHandler(true));
-
         config = new Configuration();
         config.setAppName("I_28553_CodePenRegion");
+        config.setApiKey(System.getenv("APPLITOOLS_API_KEY"));
+        config.setBatch(batchInfo);
+        config.setMatchLevel(MatchLevel.STRICT);
+
+        eyes = new Eyes();
+        eyes.setConfiguration(config);
+        eyes.setLogHandler(new StdoutLogHandler(true));
+
     }
 
     @Test
@@ -45,7 +46,7 @@ public class I_28553_CodePenRegion extends BaseTest {
         driver.get("https://codepen.io/TrentWalton/pen/eyaDr");
         waitForIsDisplayed(driver, By.id("item-title"), timeout);
 
-        eyes.open(driver, config);
+        eyes.open(driver);
 
         // eyes.checkWindow();
         // eyes.checkRegion(By.xpath("//div[@class='output-container']"), "test no sticth", false);

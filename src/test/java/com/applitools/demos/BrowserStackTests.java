@@ -6,8 +6,8 @@ import java.net.URL;
 import com.applitools.eyes.BatchInfo;
 import com.applitools.eyes.MatchLevel;
 import com.applitools.eyes.StdoutLogHandler;
+import com.applitools.eyes.selenium.Configuration;
 import com.applitools.eyes.selenium.Eyes;
-import com.applitools.eyes.selenium.config.Configuration;
 
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -26,19 +26,19 @@ public class BrowserStackTests extends BaseTest {
         String u = System.getenv("BROWSERSTACK_USERNAME");
         String k = System.getenv("BROWSERSTACK_ACCESS_KEY");
         browserstackURL = "https://" + u + ":" + k + "@hub-cloud.browserstack.com/wd/hub";
-  
-        eyes = new Eyes();
-        eyes.setApiKey(System.getenv("APPLITOOLS_API_KEY"));
-        eyes.setBatch(batchInfo);
-        eyes.setMatchLevel(MatchLevel.STRICT);
-        eyes.setLogHandler(new StdoutLogHandler(true));
 
         config = new Configuration();
         config.setAppName("Zach's BS Tests");
-        
+        config.setApiKey(System.getenv("APPLITOOLS_API_KEY"));
+        config.setBatch(batchInfo);
+        config.setMatchLevel(MatchLevel.STRICT);
+
+        eyes = new Eyes();
+        eyes.setLogHandler(new StdoutLogHandler(true));
+
         dc = new DesiredCapabilities();
     }
-    
+
     @Test
     public void androidTest() throws MalformedURLException {
         dc.setCapability("device", "Samsung Galaxy S9 Plus");

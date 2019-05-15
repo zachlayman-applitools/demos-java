@@ -23,7 +23,8 @@ public class FrameAndRegionTest extends BaseTest {
         config.setForceFullPageScreenshot(true);
         config.setViewportSize(new RectangleSize(1200, 900));
         
-        eyes.open(driver, config);
+        eyes.setConfiguration(config);
+        eyes.open(driver);
         driver.get("https://zachlayman-applitools.github.io/iframe-page.html");
         super.waitForIsDisplayed(driver, By.id("outer"), timeout);
         
@@ -36,8 +37,9 @@ public class FrameAndRegionTest extends BaseTest {
         config.setTestName("Frame PDF Test");
         config.setForceFullPageScreenshot(true);
         config.setViewportSize(new RectangleSize(1200, 900));
-        
-        eyes.open(driver, config);
+        eyes.setConfiguration(config);
+
+        eyes.open(driver);
         driver.get("https://zachlayman-applitools.github.io/iframe-pdf.html");
         super.waitForIsDisplayed(driver, By.id("outer"), timeout);
         
@@ -51,7 +53,8 @@ public class FrameAndRegionTest extends BaseTest {
         config.setForceFullPageScreenshot(true);
         config.setViewportSize(new RectangleSize(1200, 900));
         
-        eyes.open(driver, config);
+        eyes.setConfiguration(config);
+        eyes.open(driver);
         driver.get("https://zachlayman-applitools.github.io/region-overflow.html");
         super.waitForIsDisplayed(driver, By.id("outer"), timeout);
         

@@ -21,10 +21,10 @@ public class LayoutInsideStrictTest extends BaseTest {
     public void layoutInsideStrict() {
         driver = new FirefoxDriver();
         config.setTestName("Layout Inside Strict");
+        config.setMatchLevel(MatchLevel.STRICT);
         
-        eyes.setMatchLevel(MatchLevel.STRICT);
-
-        eyes.open(driver, config);
+        eyes.setConfiguration(config);
+        eyes.open(driver);
         driver.get("https://applitools.com/helloworld?diff1");
         waitForIsDisplayed(driver, By.className("section"), timeout);
 

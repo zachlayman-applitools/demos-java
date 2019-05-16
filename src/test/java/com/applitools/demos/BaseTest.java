@@ -30,7 +30,6 @@ public class BaseTest {
     public void setupEyes() {
         batchInfo = new BatchInfo(batchName);
 
-
         config = new Configuration();
         config.setAppName("Zach's Demo Java App");
         config.setViewportSize(new RectangleSize(1600, 900));

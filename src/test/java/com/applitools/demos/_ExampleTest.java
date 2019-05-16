@@ -18,6 +18,7 @@ public class _ExampleTest extends BaseTest {
     public void chrome() {
         driver = new ChromeDriver();
         config.setTestName("_Example Test");
+        eyes.setConfiguration(config);
 
         snapWebpage("http://google.com", By.id("hplogo"), null);
     }

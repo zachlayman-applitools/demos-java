@@ -4,7 +4,6 @@ import com.applitools.demos.BaseTest;
 import com.applitools.eyes.selenium.fluent.Target;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.annotations.BeforeClass;

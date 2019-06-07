@@ -21,7 +21,7 @@ public class IPhoneTests extends BaseTest {
 
         dc = new DesiredCapabilities();
         dc.setCapability(MobileCapabilityType.APPIUM_VERSION, "1.7.2");
-        dc.setCapability(MobileCapabilityType.PLATFORM_VERSION, "12.1");
+        dc.setCapability(MobileCapabilityType.PLATFORM_VERSION, "12.2");
         dc.setCapability(MobileCapabilityType.PLATFORM_NAME, "iOS");
         dc.setCapability(MobileCapabilityType.AUTOMATION_NAME, "XCUITest");
         dc.setCapability(MobileCapabilityType.DEVICE_NAME, "iPhone XS Max");

@@ -47,6 +47,7 @@ public class BrowserStackTests extends BaseTest {
 
         driver = new RemoteWebDriver(new URL(browserstackURL), dc);
         config.setTestName("BrowserStack Test");
+        eyes.setConfiguration(config);
 
         snapSearchResultsMobile("virginia tech");
     }
@@ -54,14 +55,16 @@ public class BrowserStackTests extends BaseTest {
     @Test
     public void iOSTest() throws MalformedURLException {
         dc.setCapability("browserName", "safari");
-        dc.setCapability("device", "iPhone XS");
+        dc.setCapability("device", "iPhone 8");
         dc.setCapability("realMobile", "true");
-        dc.setCapability("os_version", "12");
+        dc.setCapability("os_version", "11");
         dc.setCapability("browserstack.console", "verbose");
         dc.setCapability("browserstack.networkLogs", "true");
 
         driver = new RemoteWebDriver(new URL(browserstackURL), dc);
         config.setTestName("BrowserStack Test");
+        config.setSendDom(false);
+        eyes.setConfiguration(config);
 
         snapSearchResultsMobile("virginia tech");
     }
@@ -77,6 +80,7 @@ public class BrowserStackTests extends BaseTest {
 
         driver = new RemoteWebDriver(new URL(browserstackURL), dc);
         config.setTestName("BrowserStack Test");
+        eyes.setConfiguration(config);
 
         snapSearchResultsMobile("virginia tech");
     }

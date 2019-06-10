@@ -22,8 +22,8 @@
   <dependencies>
     <dependency>
       <groupId>com.applitools</groupId>
-      <artifactId>eyes-selenium-java3</artifactId>
-      <version>3.150.1</version>
+      <artifactId>eyes-appium-java4</artifactId>
+      <version>RELEASE</version>
     </dependency>
     <dependency>
       <groupId>org.testng</groupId>

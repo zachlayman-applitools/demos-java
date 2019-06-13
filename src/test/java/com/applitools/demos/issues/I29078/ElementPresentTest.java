@@ -9,6 +9,7 @@ public class ElementPresentTest extends BaseTests{
 	public void testElementPresent() {
 //		validateElement(homePage.fabIcon);
 		validateElement(By.id("com.google.android.apps.googlevoice:id/fab"));
+		// validateElement(By.xpath("//android.widget.ImageButton[@content-desc=\"Place a call\"]"));
 	}
 
 }

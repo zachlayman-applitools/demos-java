@@ -8,7 +8,9 @@ import com.applitools.eyes.MatchLevel;
 import com.applitools.eyes.StdoutLogHandler;
 import com.applitools.eyes.selenium.Configuration;
 import com.applitools.eyes.selenium.Eyes;
+import com.applitools.eyes.selenium.fluent.Target;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.BeforeClass;
@@ -64,9 +66,14 @@ public class BrowserStackTests extends BaseTest {
         driver = new RemoteWebDriver(new URL(browserstackURL), dc);
         config.setTestName("BrowserStack Test");
         config.setSendDom(false);
+        config.setForceFullPageScreenshot(true);
+        config.setHideScrollbars(true);
         eyes.setConfiguration(config);
 
-        snapSearchResultsMobile("virginia tech");
+        driver.get("https://www.apple.com/apple-music/");
+        eyes.open(driver);
+        eyes.check(Target.window().fully().ignore(By.cssSelector("#header-bag")));
+        eyes.checkWindow();
     }
 
     @Test

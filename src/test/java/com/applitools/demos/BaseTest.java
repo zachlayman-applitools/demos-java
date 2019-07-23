@@ -67,7 +67,7 @@ public class BaseTest {
             jsexe.executeScript(jsToInject);
         }
 
-        eyes.check(Target.window());
+        eyes.check(Target.window().fully());
     }
 
     public void snapSearchResults(String searchTerm) {

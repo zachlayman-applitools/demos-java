@@ -1,6 +1,7 @@
 package com.applitools.demos.issues;
 
 import com.applitools.demos.BaseTest;
+import com.applitools.eyes.fluent.Target;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -15,8 +16,9 @@ public class I_28256_NewBaseline_AutoMaintenance extends BaseTest {
     public void setupEyes() {
         batchName = "I_28256_NewBaseline_AutoMaintenance";
         super.setupEyes();
-        batchInfo.setId("I_28256_NewBaseline_AutoMaintenance_006");
-        config.setBatch(batchInfo);
+        // batchInfo.setId("I_28256_NewBaseline_AutoMaintenance_006");
+        // config.setBatch(batchInfo);
+
     }
 
     @Test
@@ -24,6 +26,8 @@ public class I_28256_NewBaseline_AutoMaintenance extends BaseTest {
         driver = new ChromeDriver();
         config.setTestName("Chrome Test");
 
+        eyes.setConfiguration(config);
+        
         snapWebpage("https://applitools.com/helloworld?diff1", By.className("demo-page"), null);
     }
 
@@ -31,6 +35,9 @@ public class I_28256_NewBaseline_AutoMaintenance extends BaseTest {
     public void firefox() {
         driver = new FirefoxDriver();
         config.setTestName("Firefox Test");
+        
+
+        eyes.setConfiguration(config);
 
         snapWebpage("https://applitools.com/helloworld?diff1", By.className("demo-page"), null);
     }

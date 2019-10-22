@@ -20,10 +20,10 @@ public class AmazonLayoutTest extends BaseTest {
 
     @Test
     public void chrome() {
-        driver = new FirefoxDriver();
+        driver = new ChromeDriver();
         config.setMatchLevel(MatchLevel.LAYOUT);
-        config.setTestName("AmazonLayoutTest 001");
-        config.setApiKey(System.getenv("APPLITOOLS_API_KEY_BUG"));
+        config.setTestName("AmazonLayoutTest 005");
+        config.setApiKey(System.getenv("APPLITOOLS_API_KEY"));
         // config.setServerUrl("https://zachary.applitools.com");
         eyes.setConfiguration(config);
 
@@ -44,10 +44,10 @@ public class AmazonLayoutTest extends BaseTest {
 
         eyes.open(driver);
         
-        driver.get("https://www.amazon.com/s?k=socks");
+        driver.get("https://www.amazon.com/s?k=pants");
         eyes.check(Target.window().fully().enablePatterns().useDom(true).ignoreDisplacements());
 
-        driver.get("https://www.amazon.com/s?k=watches");
+        driver.get("https://www.amazon.com/s?k=hats");
         eyes.check(Target.window().fully().enablePatterns().useDom(true).ignoreDisplacements());
     }
 }

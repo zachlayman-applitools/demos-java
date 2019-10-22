@@ -5,6 +5,7 @@ import com.applitools.eyes.MatchLevel;
 import com.applitools.eyes.RectangleSize;
 import com.applitools.eyes.StdoutLogHandler;
 import com.applitools.eyes.selenium.BrowserType;
+import com.applitools.eyes.selenium.ClassicRunner;
 import com.applitools.eyes.selenium.Configuration;
 import com.applitools.eyes.selenium.Eyes;
 import com.applitools.eyes.selenium.StitchMode;
@@ -22,7 +23,7 @@ public class I_29529_Ally extends BaseTest {
 
         WebDriver driver = new ChromeDriver();
 
-        VisualGridRunner runner = new VisualGridRunner(10);
+        ClassicRunner runner = new ClassicRunner();
 
         eyes = initializeEyes(runner);
 
@@ -33,17 +34,18 @@ public class I_29529_Ally extends BaseTest {
         // new FileLogger(System.getProperty("user.dir") +
         // "/target/logs/appliLogfile.log", true, true));
 
-        eyes.open(driver, "SAT AEM", "LoginPage", new RectangleSize(600, 800));
+        eyes.open(driver, "GAF VG vs Classic 002", "Home Page", new RectangleSize(1600, 900));
 
-        driver.navigate().to("http://www.ally.com");
+        driver.navigate().to("https://www.gaf.com/en-us");
 
-        eyes.checkWindow("LoginTest");
+        eyes.checkWindow("Home Page");
 
-        eyes.closeAsync();
+        // eyes.closeAsync();
+        runner.getAllTestResults();
 
     }
 
-    public static Eyes initializeEyes(VisualGridRunner runner) {
+    public static Eyes initializeEyes(ClassicRunner runner) {
 
         try {
 
@@ -57,7 +59,7 @@ public class I_29529_Ally extends BaseTest {
 
             eyes.setStitchMode(StitchMode.CSS);
 
-            eyes.setMatchLevel(MatchLevel.LAYOUT2);
+            // eyes.setMatchLevel(MatchLevel.LAYOUT2);
 
             eyes.setConfiguration(setConfig());
 
@@ -77,16 +79,18 @@ public class I_29529_Ally extends BaseTest {
 
             Configuration conf = new Configuration();
 
-            conf.setAppName("AEM Phase 1").setTestName("Sample Test");
+            conf.setAppName("Zachs Java App").setTestName("Sample Test");
 
-            conf.addBrowser(1024, 786, BrowserType.CHROME).addBrowser(900, 600, BrowserType.CHROME)
+            conf.addBrowser(1600, 900, BrowserType.CHROME);
+            // .addBrowser(900, 600, BrowserType.CHROME)
 
-                    .addBrowser(1024, 786, BrowserType.FIREFOX).addBrowser(900, 600, BrowserType.EDGE)
+            //         .addBrowser(1024, 786, BrowserType.FIREFOX).addBrowser(900, 600, BrowserType.EDGE)
 
-                    .addDeviceEmulation(DeviceName.iPhone6_7_8_Plus, ScreenOrientation.PORTRAIT)
+            //         .addDeviceEmulation(DeviceName.iPhone6_7_8_Plus, ScreenOrientation.PORTRAIT)
 
-                    .addDeviceEmulation(DeviceName.Galaxy_S5, ScreenOrientation.LANDSCAPE);
+            //         .addDeviceEmulation(DeviceName.Galaxy_S5, ScreenOrientation.LANDSCAPE);
 
+            conf.setApiKey(System.getenv("APPLITOOLS_API_KEY_BUG"));
             return conf;
 
         } catch (Exception e) {

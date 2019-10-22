@@ -29,7 +29,7 @@ public class BaseTest {
     @BeforeClass
     public void setupEyes() {
         batchInfo = new BatchInfo(batchName);
-
+        
         config = new Configuration();
         config.setAppName("Zach's Demo Java App");
         config.setViewportSize(new RectangleSize(1600, 900));
@@ -37,7 +37,8 @@ public class BaseTest {
         config.setApiKey(System.getenv("APPLITOOLS_API_KEY"));
         config.setMatchLevel(MatchLevel.STRICT);
         config.setTestName("Default Test Name");
-
+        // config.setServerUrl("https://eyesfabric4eyes.applitools.com");
+        
         eyes = new Eyes();
         eyes.setConfiguration(config);
         eyes.setLogHandler(new StdoutLogHandler(true));

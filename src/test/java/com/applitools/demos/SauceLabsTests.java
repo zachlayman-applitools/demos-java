@@ -8,6 +8,7 @@ import com.applitools.eyes.MatchLevel;
 import com.applitools.eyes.StdoutLogHandler;
 import com.applitools.eyes.selenium.Configuration;
 import com.applitools.eyes.selenium.Eyes;
+import com.applitools.eyes.selenium.StitchMode;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -36,9 +37,9 @@ public class SauceLabsTests extends BaseTest {
         // https://wiki.saucelabs.com/display/DOCS/Platform+Configurator#/
         dc = new DesiredCapabilities();
         dc.setCapability("browserName", "Chrome");
-        dc.setCapability("platform", "macOS 10.14");
-        dc.setCapability("version", "72.0");
-        dc.setCapability("screenResolution", "1376x1032");
+        // dc.setCapability("platform", "macOS 10.14");
+        dc.setCapability("version", "78.0");
+        dc.setCapability("screenResolution", "800x600");
 
         sauceURL = String.format(
            "http://%s:%s@ondemand.saucelabs.com:80/wd/hub",
@@ -49,7 +50,13 @@ public class SauceLabsTests extends BaseTest {
     public void saucePage() throws MalformedURLException {
         driver = new RemoteWebDriver(new URL(sauceURL), dc);
         config.setTestName("Sauce Test");
+        config.setTestName("Chrome 78 Stitch Test Sauce");
+        config.setAppName("Zach Java Code");
+        // config.setForceFullPageScreenshot(true);
+        config.setStitchMode(StitchMode.CSS);
+        config.setApiKey(System.getenv("APPLITOOLS_API_KEY"));
+        eyes.setConfiguration(config);
 
-        snapWebpage("https://www.yahoosmallbusiness.com/stores", By.id("logo"), null);
+        snapWebpage("https://www.applitools.com", By.id("hplogo"), null);
     }
 }
